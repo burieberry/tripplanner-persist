@@ -21,7 +21,8 @@ $(function(){
             var item = options[obj.key].find(function(item){
               return item.id === obj.id;
             });
-            //TODO - ajax call to add on server
+            // TO DO: ajax call to add on server
+
             days[idx][obj.key].push(item);
             renderDayAndOptions();
           }
@@ -31,7 +32,7 @@ $(function(){
       //function which renders our day  picker
       function renderDayPicker(){
         var addDay = function(){
-          $.post('/days')
+          $.post('/days', { data: 'data' })
             .then(function(day){
                 days.push({
                   id: day.id,

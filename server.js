@@ -9,6 +9,8 @@ const app = express();
 app.set('view engine', 'html');
 app.engine('html', swig.renderFile);
 
+app.use(require('body-parser').json());
+
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/vendor', express.static(path.join(__dirname, 'node_modules')));
 

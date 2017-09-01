@@ -18,14 +18,16 @@ app.get('/', (req, res, next)=> {
 });
 
 app.post('/', (req, res, next)=> {
+  console.log(req.body);
   Day.create({})
-    .then( day => {
+    .then(day => {
       res.send(day);
     });
 });
 
 app.delete('/:id', (req, res, next)=> {
-  //TODO - implement
+
+
 });
 
 //TO DO - total of six routes, add and remove hotels, restaurants, activities for a day
