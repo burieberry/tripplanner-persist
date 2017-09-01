@@ -22,9 +22,11 @@ $(function(){
               return item.id === obj.id;
             });
             // TO DO: ajax call to add on server
-
-            days[idx][obj.key].push(item);
-            renderDayAndOptions();
+            $.post(`/days/${idx}/${obj.key}/${obj.id}`, { hotel: days[0].hotels[obj.id] })
+              .then(data => {
+                days[idx][obj.key].push(item);
+                renderDayAndOptions();
+              })
           }
         });
       }
