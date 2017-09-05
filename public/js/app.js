@@ -21,9 +21,10 @@ $(function(){
             var item = options[obj.key].find(function(item){
               return item.id === obj.id;
             });
-            // TO DO: ajax call to add on server
-            $.post(`/days/${idx}/${obj.key}/${obj.id}`, { hotel: days[0].hotels[obj.id] })
-              .then(data => {
+
+            //TODO - ajax call to add on server
+            $.post(`/days/${idx + 1}/${obj.key}/${obj.id}`, { data: idx })
+              .then(function(data) {
                 days[idx][obj.key].push(item);
                 renderDayAndOptions();
               })

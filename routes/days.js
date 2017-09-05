@@ -26,19 +26,22 @@ app.post('/', (req, res, next)=> {
 
 app.delete('/:id', (req, res, next)=> {
 
-
 });
 
-//TO DO - total of six routes, add and remove hotels, restaurants, activities for a day
+// TODO - total of six routes, add and remove hotels, restaurants, activities for a day
 
 app.post('/:dayId/hotels/:id', (req, res, next)=> {
-  console.log(req.params);
-  Day.findAll({
-    where: { id: req.params.dayId }
-  })
-    .then(day => {
-      return day[0].addHotel(req.params.id);
+  Promise.all([
+      Day.findById(req.params.dayId),
+      Hotel.findById(req.params.id)
+    ])
+    .then(([day, item]) => {
+      day.addHotel(item);
+      res.send(day);
     })
+});
+
+app.delete('/:dayId/hotels/:id', (req, res, next) => {
 
 });
 
@@ -47,6 +50,14 @@ app.post('/:dayId/restaurants/:id', (req, res, next)=> {
 });
 
 app.delete('/:dayId/restaurants/:id', (req, res, next)=> {
+
+});
+
+app.post('/:dayId/activities/:id', (req, res, next) => {
+
+});
+
+app.delete('/:dayId/activities/:id', (req, res, next) => {
 
 });
 
