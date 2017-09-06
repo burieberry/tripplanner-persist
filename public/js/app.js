@@ -6,7 +6,6 @@ $(function(){
       var map = new Map('map');
       var idx = 0;
 
-
       //function which renders options
       function renderOptions(){
         Options({
@@ -22,7 +21,7 @@ $(function(){
               return item.id === obj.id;
             });
 
-            //TODO - ajax call to add on server
+            // ajax call to add on server
             $.post(`/days/${idx + 1}/${obj.key}/${obj.id}`, { data: idx })
               .then(function(data) {
                 days[idx][obj.key].push(item);
@@ -52,12 +51,20 @@ $(function(){
           if(days.length === 1){
             return;
           }
-          //TODO - remove the day on server
-          days = days.filter(function(day, _idx){
-            return _idx !== idx;
-          });
-          idx = 0;
-          renderDayPicker();
+
+          // remove the day on server
+          var currId = days[idx].id;
+          $.ajax({
+              url: `/days/${currId * 1}`,
+              method: 'DELETE'
+            })
+            .then(function(data) {
+              days = days.filter(function(day, _idx){
+                return _idx !== idx;
+              });
+              idx = 0;
+              renderDayPicker();
+            })
         }
 
         var selectDay = function(_idx){
@@ -88,8 +95,14 @@ $(function(){
           days[idx][obj.key] = days[idx][obj.key].filter(function(item){
             return item.id !== obj.id;
           });
-          //TODO - update on server
-          renderDayAndOptions();
+          // update on server
+          $.ajax({
+              url: `days/${idx + 1}/${obj.key}/${obj.id}`,
+              method: 'DELETE'
+            })
+            .then(function(data) {
+              renderDayAndOptions();
+            })
         }
         Day({
           id: '#day',
@@ -100,8 +113,5 @@ $(function(){
       }
 
       renderDayPicker();
-
     })
-
-
 });

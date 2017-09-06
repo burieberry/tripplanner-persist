@@ -20,15 +20,19 @@ app.get('/', (req, res, next)=> {
 app.post('/', (req, res, next)=> {
   Day.create({})
     .then(day => {
+      day.index = day.id;
+      day.save();
       res.send(day);
     });
 });
 
 app.delete('/:id', (req, res, next)=> {
-
+  Day.findById(req.params.id)
+    .then(day => {
+      day.destroy();
+      res.send(day);
+    })
 });
-
-// TODO - total of six routes, add and remove hotels, restaurants, activities for a day
 
 app.post('/:dayId/hotels/:id', (req, res, next)=> {
   Promise.all([
@@ -42,23 +46,58 @@ app.post('/:dayId/hotels/:id', (req, res, next)=> {
 });
 
 app.delete('/:dayId/hotels/:id', (req, res, next) => {
-
+  Promise.all([
+      Day.findById(req.params.dayId),
+      Hotel.findById(req.params.id)
+    ])
+    .then(([day, item]) => {
+      day.removeHotel(item);
+      res.send(day);
+    })
 });
 
 app.post('/:dayId/restaurants/:id', (req, res, next)=> {
-
+  Promise.all([
+      Day.findById(req.params.dayId),
+      Restaurant.findById(req.params.id)
+    ])
+    .then(([day, item]) => {
+      day.addRestaurant(item);
+      res.send(day);
+    })
 });
 
 app.delete('/:dayId/restaurants/:id', (req, res, next)=> {
-
+  Promise.all([
+      Day.findById(req.params.dayId),
+      Restaurant.findById(req.params.id)
+    ])
+    .then(([day, item]) => {
+      day.removeRestaurant(item);
+      res.send(day);
+    })
 });
 
 app.post('/:dayId/activities/:id', (req, res, next) => {
-
+  Promise.all([
+      Day.findById(req.params.dayId),
+      Activity.findById(req.params.id)
+    ])
+    .then(([day, item]) => {
+      day.addActivity(item);
+      res.send(day);
+    })
 });
 
 app.delete('/:dayId/activities/:id', (req, res, next) => {
-
+  Promise.all([
+      Day.findById(req.params.dayId),
+      Activity.findById(req.params.id)
+    ])
+    .then(([day, item]) => {
+      day.removeActivity(item);
+      res.send(day);
+    })
 });
 
 module.exports = app;
