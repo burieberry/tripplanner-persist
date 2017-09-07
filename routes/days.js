@@ -11,17 +11,15 @@ app.get('/', (req, res, next)=> {
       { model: Activity, include: [ Place ] }
     ]
   })
-  .then( days => {
+  .then(days => {
     res.send(days);
   })
   .catch(next);
 });
 
 app.post('/', (req, res, next)=> {
-  Day.create({})
+  Day.create()
     .then(day => {
-      day.index = day.id;
-      day.save();
       res.send(day);
     });
 });
@@ -29,9 +27,12 @@ app.post('/', (req, res, next)=> {
 app.delete('/:id', (req, res, next)=> {
   Day.findById(req.params.id)
     .then(day => {
-      day.destroy();
-      res.send(day);
+      return day.destroy();
     })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
 });
 
 app.post('/:dayId/hotels/:id', (req, res, next)=> {
@@ -39,10 +40,13 @@ app.post('/:dayId/hotels/:id', (req, res, next)=> {
       Day.findById(req.params.dayId),
       Hotel.findById(req.params.id)
     ])
-    .then(([day, item]) => {
-      day.addHotel(item);
-      res.send(day);
+    .then(([day, hotel]) => {
+      return day.addHotel(hotel);
     })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next)
 });
 
 app.delete('/:dayId/hotels/:id', (req, res, next) => {
@@ -50,10 +54,13 @@ app.delete('/:dayId/hotels/:id', (req, res, next) => {
       Day.findById(req.params.dayId),
       Hotel.findById(req.params.id)
     ])
-    .then(([day, item]) => {
-      day.removeHotel(item);
-      res.send(day);
+    .then(([day, hotel]) => {
+      return day.removeHotel(hotel);
     })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
 });
 
 app.post('/:dayId/restaurants/:id', (req, res, next)=> {
@@ -61,10 +68,13 @@ app.post('/:dayId/restaurants/:id', (req, res, next)=> {
       Day.findById(req.params.dayId),
       Restaurant.findById(req.params.id)
     ])
-    .then(([day, item]) => {
-      day.addRestaurant(item);
-      res.send(day);
+    .then(([day, restaurant]) => {
+      return day.addRestaurant(restaurant);
     })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
 });
 
 app.delete('/:dayId/restaurants/:id', (req, res, next)=> {
@@ -72,10 +82,13 @@ app.delete('/:dayId/restaurants/:id', (req, res, next)=> {
       Day.findById(req.params.dayId),
       Restaurant.findById(req.params.id)
     ])
-    .then(([day, item]) => {
-      day.removeRestaurant(item);
-      res.send(day);
+    .then(([day, restaurant]) => {
+      return day.removeRestaurant(restaurant);
     })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
 });
 
 app.post('/:dayId/activities/:id', (req, res, next) => {
@@ -83,10 +96,13 @@ app.post('/:dayId/activities/:id', (req, res, next) => {
       Day.findById(req.params.dayId),
       Activity.findById(req.params.id)
     ])
-    .then(([day, item]) => {
-      day.addActivity(item);
-      res.send(day);
+    .then(([day, activity]) => {
+      return day.addActivity(activity);
     })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
 });
 
 app.delete('/:dayId/activities/:id', (req, res, next) => {
@@ -94,10 +110,13 @@ app.delete('/:dayId/activities/:id', (req, res, next) => {
       Day.findById(req.params.dayId),
       Activity.findById(req.params.id)
     ])
-    .then(([day, item]) => {
-      day.removeActivity(item);
-      res.send(day);
+    .then(([day, activity]) => {
+      return day.removeActivity(activity);
     })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
 });
 
 module.exports = app;

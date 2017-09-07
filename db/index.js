@@ -49,14 +49,14 @@ const seed = ()=> {
     Promise.all(restaurants.map( item => Restaurant.create(item, options))),
     Promise.all(activities.map( item => Activity.create(item, options)))
   ])
-  .then( ([ hotels, restaurants, activities ])=> {
+  .then(([ hotels, restaurants, activities ])=> {
     return {
       hotels,
       restaurants,
       activities
     };
   })
-  .then( _tripOptions => {
+  .then(_tripOptions => {
     tripOptions = _tripOptions;
     return Promise.all([
       Day.create(),

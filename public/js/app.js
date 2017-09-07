@@ -22,8 +22,8 @@ $(function(){
             });
 
             // ajax call to add on server
-            $.post(`/days/${idx + 1}/${obj.key}/${obj.id}`, { data: idx })
-              .then(function(data) {
+            $.post(`/days/${days[idx].id}/${obj.key}/${obj.id}`)
+              .then(function() {
                 days[idx][obj.key].push(item);
                 renderDayAndOptions();
               })
@@ -31,19 +31,19 @@ $(function(){
         });
       }
 
-      //function which renders our day  picker
+      //function which renders our day picker
       function renderDayPicker(){
         var addDay = function(){
-          $.post('/days', { data: 'data' })
+          $.post('/days')
             .then(function(day){
-                days.push({
-                  id: day.id,
-                  hotels: [],
-                  restaurants: [],
-                  activities: [],
-                });
-                idx = days.length - 1;
-                renderDayPicker();
+              days.push({
+                id: day.id,
+                hotels: [],
+                restaurants: [],
+                activities: [],
+              });
+              idx = days.length - 1;
+              renderDayPicker();
             });
         }
 
@@ -53,12 +53,11 @@ $(function(){
           }
 
           // remove the day on server
-          var currId = days[idx].id;
           $.ajax({
-              url: `/days/${currId * 1}`,
-              method: 'DELETE'
+              method: 'DELETE',
+              url: `/days/${days[idx].id}`
             })
-            .then(function(data) {
+            .then(function() {
               days = days.filter(function(day, _idx){
                 return _idx !== idx;
               });
@@ -90,17 +89,17 @@ $(function(){
       }
 
       //this function render day
-      function renderDay(){
+      function renderDay() {
         var onRemoveItem = function(obj){
           days[idx][obj.key] = days[idx][obj.key].filter(function(item){
             return item.id !== obj.id;
           });
           // update on server
           $.ajax({
-              url: `days/${idx + 1}/${obj.key}/${obj.id}`,
-              method: 'DELETE'
+              method: 'DELETE',
+              url: `days/${days[idx].id}/${obj.key}/${obj.id}`
             })
-            .then(function(data) {
+            .then(function() {
               renderDayAndOptions();
             })
         }
