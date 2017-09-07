@@ -25,10 +25,7 @@ app.post('/', (req, res, next)=> {
 });
 
 app.delete('/:id', (req, res, next)=> {
-  Day.findById(req.params.id)
-    .then(day => {
-      return day.destroy();
-    })
+  Day.destroy({ where: {id: req.params.id }})
     .then(() => {
       res.sendStatus(204);
     })
